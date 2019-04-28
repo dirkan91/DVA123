@@ -1,45 +1,74 @@
+
+// This is the client part of the system. It's designed to force two choices,
+// then send the data over to the server for processing.
+// Currently it uses the loopback interface. This have to be changed if the
+// program is going to work for several devices.
+
+// Import networking
 import processing.net.*;
 
-int rect1X, rect1Y, rect2X, rect2Y, rect3X, rect3Y, rect4X, rect4Y;   // Position of square button
-int rectSize = 140;     // Diameter of rect
+// Initialise the global variables for the position of the square buttons.
+int rect1X, rect1Y, rect2X, rect2Y, rect3X, rect3Y, rect4X, rect4Y;
+
+// Diameter of squares
+int rectSize = 140;
+
+// Initialise all color variables
 color rect1Color, rect2Color, rect3Color, rect4Color, baseColor;
 color rect1Highlight, rect2Highlight, rect3Highlight, rect4Highlight;
 color currentColor1, currentColor2, currentColor3, currentColor4;
+
+// Initialise variable used if the mouse is over the squares (rectangle).
+// Changes value depending on which square the mouse hovers over. (1-4)
 int rectOver = 0;
+
+// Store choices made.
 String rectChoice1 = "0";
 String rectChoice2 = "0";
 int squarespace = 80;
+
+// Setup client and data variable.
 Client myClient;
 int port = 5204;
 String data;
 
+
+// The void setup function runs once.
 void setup() {
   size(360, 640);  // Size must be the first statement
   // Set all color variables
   background(0,204,204);
   fill(145,245,245);
+  // Size for text box
   int x=200;
   int y=80;
   rect(width/2-x/2, height/14, x, y);
   textSize(32);
   textAlign(CENTER, CENTER);
+  // Text color
   fill(32,32,32);
   text("HÄNG MED", width/2, height/14+y/2);
+
+  // Sets text size for all text that follows.
   textSize(16);
-  rect1Color = color(102,255,102);
-  rect2Color = color(255,102,102);
-  rect3Color = color(255,255,102);
-  rect4Color = color(102,102,255);
-  rect1Highlight = color(51,210,51);
-  rect2Highlight = color(210,51,51);
-  rect3Highlight = color(210,210,51);  
-  rect4Highlight = color(51,51,210);
+
+  // Color variables. RGB.
+  rect1Color = color(102,255,102); // GREEN
+  rect2Color = color(255,102,102); // RED
+  rect3Color = color(255,255,102); // YELLOW
+  rect4Color = color(102,102,255); // BLUE
+  rect1Highlight = color(51,210,51); // DARK GREEN
+  rect2Highlight = color(210,51,51); // DARK RED
+  rect3Highlight = color(210,210,51);// DARK YELLOW
+  rect4Highlight = color(51,51,210); // DARK BLUE
   
+  // Stores color changes.
   currentColor1 = rect1Color;
   currentColor2 = rect2Color;
   currentColor3 = rect3Color;
   currentColor4 = rect4Color;
-  // Set position of squares
+
+  // Set position of the four choice squares
   rect1X = width/2-rectSize/2-squarespace;
   rect1Y = height/2-rectSize/2-squarespace-5;
   rect2X = width/2-rectSize/2+squarespace;
@@ -49,19 +78,18 @@ void setup() {
   rect4X = width/2-rectSize/2+squarespace;
   rect4Y = height/2-rectSize/2+squarespace+5;
   ellipseMode(CENTER);
+  // Draws the black lines used in the background.
   drawLine();
   // Connect to server
   myClient = new Client(this, "127.0.0.1", port);
   
 }
 
-
+// The voice draw function is a loop by default. Runs continously.
 void draw() { 
   update(mouseX, mouseY);
   drawRect();
   
-  //myClient.write(rectChoice1);
-  //myClient.write(rectChoice2);
   switch (rectOver) {
     case 1:
       fill(rect1Highlight);
@@ -92,6 +120,8 @@ void draw() {
   }
 }
 
+// Changes the value of the rectOver variable depending on which square the 
+// mouse hovers over.
 void update(int x, int y) {
   if ( overRect(rect1X, rect1Y, rectSize, rectSize) ) {
     rectOver = 1;
@@ -110,6 +140,10 @@ void update(int x, int y) {
   }
 }
 
+// This function runs every time the mouse is pressed.
+// If the pointer is over a square, fill it with the darker color.
+// Also forces two choices and sends the choices to the server as a string with
+// a space. "choice1 choice2"
 void mousePressed() {
   if (rectOver == 1 || rectOver == 2) {
     if (rectOver == 1) {
@@ -146,6 +180,8 @@ void mousePressed() {
   }
   
   else {
+    // Resets colors and choices if a mousebutton is pressed
+    // outside of the squares.
     rectChoice1 = "0";
     rectChoice2 = "0";
     currentColor1 = rect1Color;
@@ -153,12 +189,14 @@ void mousePressed() {
     currentColor3 = rect3Color;
     currentColor4 = rect4Color;
   }
+  // Sends data only if choices have been made.
   data = rectChoice1 + " " + rectChoice2;
   if (rectChoice1.equals("0") == false && rectChoice2.equals("0") == false) {
     myClient.write(data);
   }
 }
 
+// Gives a value of true of the mouse pointer is hovering over a square
 boolean overRect(int x, int y, int width, int height)  {
   if (mouseX >= x && mouseX <= x+width && 
       mouseY >= y && mouseY <= y+height) {
@@ -169,7 +207,9 @@ boolean overRect(int x, int y, int width, int height)  {
 }
 
 void drawRect() {
-  // Fill squares with color and text
+  // Draw squares and fill them with color and text. The fill function fills
+  // everything below it, therefore several fill functions need to be used to
+  // guarantee correct color usage.
   fill(currentColor1);
   rect(rect1X, rect1Y, rectSize, rectSize);
   fill(0);
@@ -188,9 +228,11 @@ void drawRect() {
   text("UTVECKLA", rect4X+rectSize/2, rect4Y+rectSize/2);
 }
 
+// Draw lines used in the background
 void drawLine() {
-  // Draw lines
+  // strokeWeight is the width of the line.
   strokeWeight(3);
+  // Draw actual lines. (x-start, y-start, x-end, y-end point)
   line(50, height/2, width-50, height/2);
   line(width/2-6, rect1Y+rectSize/2, width/2+6, rect1Y+rectSize/2);
   line(width/2-6, rect3Y+rectSize/2, width/2+6, rect3Y+rectSize/2);
