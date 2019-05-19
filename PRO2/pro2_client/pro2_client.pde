@@ -2,6 +2,7 @@
 // Import networking
 import processing.net.*;
 
+// Variables for rectangle coordinates and sizes.
 int rect1X, rect1Y, rect2X, rect2Y, rect3X, rect3Y;
 int rectSizeX = 200;
 int rectSizeY = 50;
@@ -25,19 +26,21 @@ int rectOver = 0;
 void setup() {
   size(360, 640);  // Size must be the first statement
   background(60);
+  
+  // Text and color variables
   textAlign(CENTER, CENTER);
   textSize(16);
   rect1Color = color(120); // GREEN
   rect2Color = color(120); // YELLOW
   rect3Color = color(120); // RED
-
   rect1Highlight = color(51,210,51); // DARK GREEN
   rect2Highlight = color(210,210,51);// DARK YELLOW
   rect3Highlight = color(210,51,51); // DARK RED
-  
   currentColor1 = rect1Color;
   currentColor2 = rect2Color;
   currentColor3 = rect3Color;
+  
+  // Rectangle coordinates
   rect1X = width/2-rectSizeX/2;
   rect1Y = height/2-rectSizeY/2-rectSizeY-20;
   rect2X = width/2-rectSizeX/2;
@@ -50,9 +53,8 @@ void setup() {
 
 // The voice draw function is a loop by default. Runs continously.
 void draw() {
-  update();
-  drawRect();
-
+  update(); // Tracks mouse movement
+  drawRect(); // Draws rectangles
   switch (rectOver) {
     case 1:
       fill(rect1Highlight);
@@ -98,17 +100,9 @@ void update() {
   }
 }
 
-/*
-void keyPressed() {
-  if (key >= '1' && key <= '9') {
-    choice = str(key);
-    myClient.write(choice);
-  }
-  else
-    choice = "0";
-}
-*/
 
+// If mouse is pressed over a rectangle, color it with the darker color,
+// Also, deselects other rectangles.
 void mousePressed() {
   if (rectOver == 1 || rectOver == 2 || rectOver == 3) {
     if (rectOver == 1) {
@@ -136,13 +130,10 @@ void mousePressed() {
       currentColor2 = rect2Color;
     }
   }
-  //else {
-  //  currentColor1 = rect1Color;
-  //  currentColor2 = rect2Color;
-  //  currentColor3 = rect3Color;
-  //}
 }
 
+// Function for figuring out if the mouse is above a rectangle 
+// or not. Tracks mouse movement.
 boolean overRect(int x, int y, int width, int height)  {
   if (mouseX >= x && mouseX <= x+width && 
       mouseY >= y && mouseY <= y+height) {

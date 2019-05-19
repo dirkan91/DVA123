@@ -4,16 +4,22 @@ import processing.net.*;
 // Setup the server variable
 Server myServer;
 
+// Set up variables for choices and previous choices
 int choice = 0;
 int prevchoice = 0;
-int choiceflag = 0;
+
+// Variable used for reversing the image flow.
 int revflag = 0;
+
+// Size of resolution. Used in image rendering.
 int resX=1080/2;
 int resY=1527/2;
-int counter=0;
 
 // Create image array
 PImage[] img = new PImage[13];
+
+// Used in array to track image selection
+int counter=0;
 
 // Runs once.
 void setup() {
@@ -48,20 +54,27 @@ void draw() {
   if (thisClient !=null) {
     String whatClientSaid = thisClient.readString();
     if (whatClientSaid != null) {
-      // Splits the string the client sent, converts it to an integer and stores
-      // them in an integer array.
+      // Stores previous choices if they are different
+      // from the new choice.
       if (prevchoice != choice) {
         prevchoice = choice;
       }
+      // Converts the data from the client to an integer "choice".
       choice = int(whatClientSaid);
+      // Sets a flag for reversing the image flow if the new choice
+      // is lower than the previous choice (for example, going from high
+      // data rate to lower).
       if (choice < prevchoice) {
         revflag = 1;
       }
     }
   }
+  // The following if statements determine what image to display depending
+  // on the choice made and if the new choice is lower data rate or higher.
   if (choice == 1 && counter < 3 && revflag != 1) {
     image(img[counter],0,0,resX,resY);
     counter++;
+    // Loops between three images to create the illusion of a movie.
     if (counter == 3) {
       counter = counter - 3;
     }
@@ -80,7 +93,7 @@ void draw() {
       counter = counter - 3;
     }
   }
-  
+  // Reverses the image flow if the reverse flag is set.
   if (counter > 0 && revflag == 1) {
     image(img[counter],0,0,resX,resY);
     counter--;
