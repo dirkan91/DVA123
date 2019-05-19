@@ -5,8 +5,12 @@ import processing.net.*;
 Server myServer;
 
 int choice = 0;
+int prevchoice = 0;
+int choiceflag = 0;
+int revflag = 0;
 int resX=1080/2;
 int resY=1527/2;
+int counter=0;
 
 // Create image array
 PImage[] img = new PImage[13];
@@ -14,7 +18,8 @@ PImage[] img = new PImage[13];
 // Runs once.
 void setup() {
   //size(1080, 1527);
-  size(540,764);
+  size(540,763);
+  frameRate(1.5);
   background(255);
   // Initialise server.
   myServer = new Server(this, 5204, "127.0.0.1");
@@ -45,35 +50,45 @@ void draw() {
     if (whatClientSaid != null) {
       // Splits the string the client sent, converts it to an integer and stores
       // them in an integer array.
-      choice = int(whatClientSaid);
-      if (choice != 0) {
-        changeImage();
+      if (prevchoice != choice) {
+        prevchoice = choice;
       }
-    } 
+      choice = int(whatClientSaid);
+      if (choice < prevchoice) {
+        revflag = 1;
+      }
+    }
   }
-}
-
-void changeImage() {
-  switch (choice) {
-    case 1:
-      image(img[0], 0, 0, resX, resY);
-      break;
-    case 2:
-      image(img[1], 0, 0, resX, resY);
-      break;
-    case 3:
-      image(img[2], 0, 0, resX, resY);
-      break;
-    case 4:
-      image(img[3], 0, 0, resX, resY);
-      break;
-    default:
-      //background(255);
-      //choice = 0;
-      break;
+  if (choice == 1 && counter < 3 && revflag != 1) {
+    image(img[counter],0,0,resX,resY);
+    counter++;
+    if (counter == 3) {
+      counter = counter - 3;
+    }
   }
-}
-
-void loopImage() {
+  else if (choice == 2 && counter < 8 && revflag != 1) {
+    image(img[counter],0,0,resX,resY);
+    counter++;
+    if (counter == 8) {
+      counter = counter - 3;
+    }
+  }
+  else if (choice == 3 && counter < 13 && revflag != 1) {
+    image(img[counter],0,0,resX,resY);
+    counter++;
+    if (counter == 13) {
+      counter = counter - 3;
+    }
+  }
   
+  if (counter > 0 && revflag == 1) {
+    image(img[counter],0,0,resX,resY);
+    counter--;
+    if (choice == 2 && counter == 5) {
+      revflag = 0;
+    }
+    else if (choice == 1 && counter == 0) {
+      revflag = 0;
+    }
+  }
 }
