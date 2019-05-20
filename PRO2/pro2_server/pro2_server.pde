@@ -12,8 +12,14 @@ int prevchoice = 0;
 int revflag = 0;
 
 // Size of resolution. Used in image rendering.
-int resX=1080/2;
-int resY=1527/2;
+float resX=1080*0.65;
+float resY=1527*0.65;
+//int resX=540;
+//int resY=764;
+//int resX=648;
+//int resY=917;
+int cordX=1280/2;
+int cordY=1024/2;
 
 // Create image array
 PImage[] img = new PImage[13];
@@ -24,9 +30,10 @@ int counter=0;
 // Runs once.
 void setup() {
   //size(1080, 1527);
-  size(540,763);
-  frameRate(1.5);
-  background(255);
+  //size(540,763);
+  size(1280, 1024);
+  frameRate(3);
+  background(60);
   // Initialise server.
   myServer = new Server(this, 5204, "127.0.0.1");
   
@@ -48,6 +55,7 @@ void setup() {
 
 // Runs as a loop
 void draw() {
+  imageMode(CENTER);
   Client thisClient = myServer.available();
   // If the client is not null, and says something, save what it said in a
   // variable and count it.
@@ -72,7 +80,7 @@ void draw() {
   // The following if statements determine what image to display depending
   // on the choice made and if the new choice is lower data rate or higher.
   if (choice == 1 && counter < 3 && revflag != 1) {
-    image(img[counter],0,0,resX,resY);
+    image(img[counter],cordX,cordY,resX,resY);
     counter++;
     // Loops between three images to create the illusion of a movie.
     if (counter == 3) {
@@ -80,14 +88,14 @@ void draw() {
     }
   }
   else if (choice == 2 && counter < 8 && revflag != 1) {
-    image(img[counter],0,0,resX,resY);
+    image(img[counter],cordX,cordY,resX,resY);
     counter++;
     if (counter == 8) {
       counter = counter - 3;
     }
   }
   else if (choice == 3 && counter < 13 && revflag != 1) {
-    image(img[counter],0,0,resX,resY);
+    image(img[counter],cordX,cordY,resX,resY);
     counter++;
     if (counter == 13) {
       counter = counter - 3;
@@ -95,7 +103,7 @@ void draw() {
   }
   // Reverses the image flow if the reverse flag is set.
   if (counter > 0 && revflag == 1) {
-    image(img[counter],0,0,resX,resY);
+    image(img[counter],cordX,cordY,resX,resY);
     counter--;
     if (choice == 2 && counter == 5) {
       revflag = 0;

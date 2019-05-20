@@ -43,7 +43,7 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
 const uint16_t colors[] = {
   matrix.Color(255, 255, 0), matrix.Color(255, 160, 0), matrix.Color(255, 50, 0) };
 
-int incomingbyte = 0;
+char incomingbyte = '0';
 
 void setup() {
   Serial.begin(9600);
@@ -57,16 +57,16 @@ int x    = matrix.width();
 int pass = 0;
 
 void loop() {
-  if (Serial.available() > 1){
-    incomingbyte = Serial.parseInt();
+  if (Serial.available() > 0){
+    incomingbyte = Serial.read();
 
-    Serial.print("I recieved: ");
-    Serial.print(incomingbyte, DEC);
-    Serial.print("\n");
+    //Serial.print("I recieved: ");
+    //Serial.print(incomingbyte, DEC);
+    //Serial.print("\n");
 
     switch (incomingbyte) {
-      case 1:
-      while(Serial.available()>1 == false){
+      case '1':
+      while(Serial.available()>0 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){
@@ -88,8 +88,8 @@ void loop() {
       }
       break;
 
-      case 2:
-      while(Serial.available()>1 == false){
+      case '2':
+      while(Serial.available()>0 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){
@@ -111,8 +111,8 @@ void loop() {
       }
       break;
 
-      case 3:
-      while(Serial.available()>1 == false){
+      case '3':
+      while(Serial.available()>0 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){

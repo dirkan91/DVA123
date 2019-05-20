@@ -1,6 +1,7 @@
 
 // Import networking
 import processing.net.*;
+import processing.serial.*;
 
 // Variables for rectangle coordinates and sizes.
 int rect1X, rect1Y, rect2X, rect2Y, rect3X, rect3Y;
@@ -17,6 +18,9 @@ color currentColor1, currentColor2, currentColor3;
 Client myClient;
 int port = 5204;
 String choice = "0";
+String val;
+
+Serial myPort;
 
 // Initialise variable used if the mouse is over the squares (rectangle).
 // Changes value depending on which square the mouse hovers over. (1-4)
@@ -49,6 +53,8 @@ void setup() {
   rect3Y = height/2-rectSizeY/2+rectSizeY+20;
   // Connect to server
   myClient = new Client(this, "127.0.0.1", port);
+  String portName = Serial.list()[0];
+  myPort = new Serial(this, portName, 9600);
 }
 
 // The voice draw function is a loop by default. Runs continously.
@@ -79,8 +85,13 @@ void draw() {
   }
   if (choice.equals("0") == false) {
     myClient.write(choice);
+    myPort.write(choice);
     choice = "0";
   }
+  if ( myPort.available() > 0) {  // If data is available,
+  val = myPort.readStringUntil('\n');         // read it and store it in val
+  } 
+println(val); //print it out in the console
 }
 
 // Changes the value of the rectOver variable depending on which square the 
