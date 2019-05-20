@@ -41,7 +41,7 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
   NEO_GRB            + NEO_KHZ800);
 
 const uint16_t colors[] = {
-  matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
+  matrix.Color(255, 255, 0), matrix.Color(255, 160, 0), matrix.Color(255, 50, 0) };
 
 int incomingbyte = 0;
 
@@ -50,7 +50,7 @@ void setup() {
   matrix.begin();
   matrix.setTextWrap(false);
   matrix.setBrightness(40);
-  matrix.setTextColor(colors[0]);
+  //matrix.setTextColor(colors[0]);
 }
 
 int x    = matrix.width();
@@ -58,25 +58,26 @@ int pass = 0;
 
 void loop() {
   if (Serial.available() > 1){
-     incomingbyte = Serial.parseInt();
+    incomingbyte = Serial.parseInt();
 
     Serial.print("I recieved: ");
-    Serial.print(incomingbyte, 10);
+    Serial.print(incomingbyte, DEC);
     Serial.print("\n");
 
     switch (incomingbyte) {
       case 1:
-      matrix.fillScreen(matrix.Color(255, 0, 255));
       while(Serial.available()>1 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
-                    bright--;     
+                    bright--;
+                    matrix.fillScreen(colors[0]);     
                     matrix.setBrightness(bright);
                   }
                   if(i>100){
                     bright++;
+                    matrix.fillScreen(colors[0]);
                     matrix.setBrightness(bright);
                   }
                   
@@ -88,17 +89,18 @@ void loop() {
       break;
 
       case 2:
-      matrix.fillScreen(matrix.Color(255, 255, 0));
       while(Serial.available()>1 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
-                    bright--;     
+                    bright--;
+                    matrix.fillScreen(colors[1]);
                     matrix.setBrightness(bright);
                   }
                   if(i>100){
                     bright++;
+                    matrix.fillScreen(colors[1]);
                     matrix.setBrightness(bright);
                   }
                   
@@ -110,17 +112,18 @@ void loop() {
       break;
 
       case 3:
-      matrix.fillScreen(matrix.Color(0, 255, 255));
       while(Serial.available()>1 == false){
 
               int bright = 102;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
-                    bright--;     
+                    bright--;
+                    matrix.fillScreen(colors[2]);     
                     matrix.setBrightness(bright);
                   }
                   if(i>100){
                     bright++;
+                    matrix.fillScreen(colors[2]);
                     matrix.setBrightness(bright);
                   }
                   
