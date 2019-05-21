@@ -52,9 +52,19 @@ void setup() {
   rect3X = width/2-rectSizeX/2;
   rect3Y = height/2-rectSizeY/2+rectSizeY+20;
   // Connect to server
+  try {
   myClient = new Client(this, "127.0.0.1", port);
+  }
+  catch (NullPointerException e) {
+    print("Connection Error");
+  }
   String portName = Serial.list()[0];
-  myPort = new Serial(this, portName, 9600);
+  try {
+    myPort = new Serial(this, portName, 9600);
+  }
+  catch (RuntimeException e) {
+    print("Serial Port Error");
+  }
 }
 
 // The voice draw function is a loop by default. Runs continously.
@@ -84,14 +94,27 @@ void draw() {
       break;
   }
   if (choice.equals("0") == false) {
-    myClient.write(choice);
-    myPort.write(choice);
+    try {
+      myClient.write(choice);
+    }
+    catch (NullPointerException e) {
+      print("Client-server write error");
+    }
+    try {
+      myPort.write(choice);
+    } 
+    catch (NullPointerException e) {
+    }
     choice = "0";
   }
-  if ( myPort.available() > 0) {  // If data is available,
-  val = myPort.readStringUntil('\n');         // read it and store it in val
+  try {
+    if ( myPort.available() > 0) {  // If data is available,
+    val = myPort.readStringUntil('\n');         // read it and store it in val
+    }
   } 
-println(val); //print it out in the console
+  catch (NullPointerException e) {
+  }
+//println(val); //print it out in the console
 }
 
 // Changes the value of the rectOver variable depending on which square the 

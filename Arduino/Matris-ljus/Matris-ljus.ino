@@ -41,7 +41,7 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
   NEO_GRB            + NEO_KHZ800);
 
 const uint16_t colors[] = {
-  matrix.Color(255, 255, 0), matrix.Color(255, 160, 0), matrix.Color(255, 50, 0) };
+  matrix.Color(255, 200, 0), matrix.Color(255, 160, 0), matrix.Color(255, 50, 0) };
 
 char incomingbyte = '0';
 
