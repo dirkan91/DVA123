@@ -41,7 +41,7 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
   NEO_GRB            + NEO_KHZ800);
 
 const uint16_t colors[] = {
-  matrix.Color(255, 200, 0), matrix.Color(255, 160, 0), matrix.Color(255, 50, 0) };
+  matrix.Color(255, 165, 0), matrix.Color(255, 130, 0), matrix.Color(255, 50, 0) };
 
 char incomingbyte = '0';
 
@@ -68,7 +68,7 @@ void loop() {
       case '1':
       while(Serial.available()>0 == false){
 
-              int bright = 102;
+              int bright = 200;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
                     bright--;
@@ -91,7 +91,7 @@ void loop() {
       case '2':
       while(Serial.available()>0 == false){
 
-              int bright = 102;
+              int bright = 200;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
                     bright--;
@@ -114,7 +114,7 @@ void loop() {
       case '3':
       while(Serial.available()>0 == false){
 
-              int bright = 102;
+              int bright = 200;
                 for(int i = 0; i < 200; i++){
                   if(i<100){   
                     bright--;
